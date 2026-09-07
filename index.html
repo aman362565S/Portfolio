@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aman Kumar - Full Stack Developer</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header-container">
+      <a href="#home" class="logo"><span class="gradient-text">AK</span>.</a>
+      
+      <nav class="nav-links">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="resume.pdf" target="_blank" class="resume-btn">Resume</a>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon dark-icon"></i>
+          <i class="fa-solid fa-sun light-icon"></i>
+        </button>
+      </nav>
+
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobile-btn">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="#home" class="mobile-link">Home</a>
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#skills" class="mobile-link">Skills</a>
+      <a href="#projects" class="mobile-link">Projects</a>
+      <a href="#experience" class="mobile-link">Experience</a>
+      <a href="resume.pdf" target="_blank" class="mobile-resume-btn">Download Resume</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <!-- Ambient Orbs -->
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+
+      <div class="container hero-content fade-up">
+        <div class="status-badge">
+          <span class="pulse-dot"></span> Available for new opportunities
+        </div>
+        
+        <h1 class="hero-title">
+          Hi, I'm <br>
+          <span class="gradient-text">Aman Kumar</span>
+        </h1>
+        
+        <h2 class="hero-subtitle">
+          I am a <span class="typing-text">Full Stack Developer</span>
+        </h2>
+        
+        <p class="hero-desc">
+          I'm a passionate Full Stack Developer and AI/ML enthusiast pursuing B.E. in Information Technology at Chandigarh University. I love building innovative web applications and exploring the intersection of artificial intelligence and software development.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">Explore Projects <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="https://github.com/aman362565S" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-github"></i> GitHub</a>
+          <a href="https://linkedin.com/in/aman-kumar" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator fade-up" style="animation-delay: 1s;">
+        <span>Discover</span>
+        <i class="fa-solid fa-arrow-down bounce"></i>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+      <div class="container fade-up">
+        <div class="section-heading">
+          <h2>About Me</h2>
+          <p>A glimpse into my background and what drives me.</p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-visual">
+            <div class="glass-card initials-card">
+              <span class="gradient-text text-huge">AK</span>
+            </div>
+          </div>
+          
+          <div class="about-text">
+            <h3>Driven by <span class="gradient-text">curiosity</span> and <span class="gradient-text">code</span>.</h3>
+            <p>With a strong foundation in modern web technologies and a deep interest in machine learning, I craft end-to-end solutions that solve real-world problems — from plant disease detection using computer vision to full-stack platforms serving thousands of users.</p>
+            
+            <div class="education-card glass-card">
+              <h4 class="edu-title"><i class="fa-solid fa-graduation-cap"></i> Education</h4>
+              <h5>B.E. Information Technology</h5>
+              <p class="institution">Chandigarh University</p>
+              <div class="edu-meta">
+                <span><i class="fa-solid fa-location-dot"></i> Chandigarh, India</span>
+                <span><i class="fa-solid fa-calendar"></i> 2022 – 2026</span>
+              </div>
+              <div class="cgpa-badge">CGPA: 8.5 / 10</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+      <div class="container fade-up">
+        <div class="section-heading">
+          <h2>Technical Arsenal</h2>
+          <p>A comprehensive overview of my current tech stack.</p>
+        </div>
+
+        <div class="skills-container">
+          <div class="skill-category">
+            <h3 class="category-title">Frontend</h3>
+            <div class="skill-pills">
+              <div class="skill-pill">🌐 HTML5</div>
+              <div class="skill-pill">🎨 CSS3</div>
+              <div class="skill-pill">⚡ JavaScript</div>
+              <div class="skill-pill">⚛️ React</div>
+              <div class="skill-pill">▲ Next.js</div>
+              <div class="skill-pill">💨 Tailwind CSS</div>
+              <div class="skill-pill">📘 TypeScript</div>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="category-title">Backend & Database</h3>
+            <div class="skill-pills">
+              <div class="skill-pill">🟢 Node.js</div>
+              <div class="skill-pill">🚂 Express.js</div>
+              <div class="skill-pill">🍃 MongoDB</div>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="category-title">AI / ML & Languages</h3>
+            <div class="skill-pills">
+              <div class="skill-pill">🐍 Python</div>
+              <div class="skill-pill">🤖 Machine Learning</div>
+              <div class="skill-pill">☕ Java</div>
+              <div class="skill-pill">⚙️ C++</div>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="category-title">Tools</h3>
+            <div class="skill-pills">
+              <div class="skill-pill">📦 Git</div>
+              <div class="skill-pill">🐙 GitHub</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+      <div class="container fade-up">
+        <div class="section-heading">
+          <h2>Featured Work</h2>
+          <p>A selection of my best projects, highlighting my expertise.</p>
+        </div>
+
+        <!-- Bento Grid -->
+        <div class="bento-grid">
+          
+          <!-- Project 1 (Featured) -->
+          <div class="bento-item featured glass-card" style="--gradient: linear-gradient(to bottom right, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));">
+            <div class="bento-header">
+              <div class="project-icon">🌿</div>
+              <div class="project-links">
+                <a href="https://github.com/aman362565S" target="_blank"><i class="fa-brands fa-github"></i></a>
+              </div>
+            </div>
+            <div class="bento-content">
+              <span class="project-category" style="color: #22C55E;">AI/ML</span>
+              <h3>Plant Disease Detection</h3>
+              <p>AI-powered web app that detects plant diseases from leaf images using deep learning (CNN). Achieves 94% accuracy across 38 disease classes with real-time diagnosis and treatment recommendations.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">TensorFlow</span>
+                <span class="tech-tag">Flask</span>
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">CNN</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="bento-item glass-card" style="--gradient: linear-gradient(to bottom right, rgba(56, 189, 248, 0.1), rgba(6, 182, 212, 0.1));">
+            <div class="bento-header">
+              <div class="project-icon">🌐</div>
+              <div class="project-links">
+                <a href="https://github.com/aman362565S" target="_blank"><i class="fa-brands fa-github"></i></a>
+              </div>
+            </div>
+            <div class="bento-content">
+              <span class="project-category" style="color: #38BDF8;">Full Stack</span>
+              <h3>DevConnect</h3>
+              <p>A full-stack social platform for developers to connect, share projects, and collaborate.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">Node.js</span>
+                <span class="tech-tag">MongoDB</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="bento-item glass-card" style="--gradient: linear-gradient(to bottom right, rgba(167, 139, 250, 0.1), rgba(236, 72, 153, 0.1));">
+            <div class="bento-header">
+              <div class="project-icon">🤖</div>
+              <div class="project-links">
+                <a href="https://github.com/aman362565S" target="_blank"><i class="fa-brands fa-github"></i></a>
+              </div>
+            </div>
+            <div class="bento-content">
+              <span class="project-category" style="color: #A78BFA;">AI/ML</span>
+              <h3>AI Code Assistant</h3>
+              <p>A browser-based IDE with integrated AI code completion powered by Google Gemini API.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Next.js</span>
+                <span class="tech-tag">Gemini API</span>
+                <span class="tech-tag">Monaco</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 4 (Wide) -->
+          <div class="bento-item wide glass-card" style="--gradient: linear-gradient(to bottom right, rgba(251, 146, 60, 0.1), rgba(245, 158, 11, 0.1));">
+            <div class="bento-header">
+              <div class="project-icon">🛒</div>
+              <div class="project-links">
+                <a href="https://github.com/aman362565S" target="_blank"><i class="fa-brands fa-github"></i></a>
+              </div>
+            </div>
+            <div class="bento-content">
+              <span class="project-category" style="color: #FB923C;">Full Stack</span>
+              <h3>E-Commerce Platform</h3>
+              <p>Modern e-commerce platform with product management, cart, Stripe payments, order tracking, and an admin dashboard with real-time analytics.</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Next.js</span>
+                <span class="tech-tag">MongoDB</span>
+                <span class="tech-tag">Stripe</span>
+                <span class="tech-tag">Prisma</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+      <div class="container fade-up">
+        <div class="section-heading">
+          <h2>Experience</h2>
+          <p>My professional journey and roles.</p>
+        </div>
+
+        <div class="experience-list">
+          <div class="experience-card glass-card">
+            <div class="exp-icon">💼</div>
+            <div class="exp-details">
+              <h3>Full Stack Developer Intern</h3>
+              <h4>TechNova Solutions <span>• Remote</span></h4>
+              <p class="exp-date">May 2024 – Aug 2024</p>
+              <ul>
+                <li>Developed React dashboards improving data visualization performance by 40%</li>
+                <li>Built RESTful APIs with Node.js and Express serving 10K+ daily requests</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="experience-card glass-card">
+            <div class="exp-icon">🔬</div>
+            <div class="exp-details">
+              <h3>Research Assistant</h3>
+              <h4>Chandigarh University – AI/ML Lab <span>• Chandigarh, India</span></h4>
+              <p class="exp-date">Jan 2024 – Apr 2024</p>
+              <ul>
+                <li>Researched and implemented CNN architectures for agricultural disease detection</li>
+                <li>Achieved 94% validation accuracy on PlantVillage dataset</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Aman Kumar. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://github.com/aman362565S" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://linkedin.com/in/aman-kumar" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
