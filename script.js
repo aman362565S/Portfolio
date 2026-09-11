@@ -1,204 +1,454 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-  /* ==========================================================================
-     Custom Cursor
-     ========================================================================== */
-  const cursorDot = document.querySelector('.cursor-dot');
-  const cursorRing = document.querySelector('.cursor-ring');
+  /* =========================================
+     ELEMENTS
+  ========================================= */
 
-  let mouseX = 0;
-  let mouseY = 0;
-  let ringX = 0;
-  let ringY = 0;
+  const header = document.getElementById("header");
+  const menuToggle = document.getElementById("menuToggle");
+  const navLinks = document.querySelectorAll(".nav a");
+  const sections = document.querySelectorAll("main section[id]");
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    // Update dot immediately
-    if (cursorDot) {
-      cursorDot.style.left = `${mouseX}px`;
-      cursorDot.style.top = `${mouseY}px`;
-    }
-  });
 
-  // Smooth follow for the ring
-  const renderCursor = () => {
-    // ease factor
-    ringX += (mouseX - ringX) * 0.2;
-    ringY += (mouseY - ringY) * 0.2;
-    
-    if (cursorRing) {
-      cursorRing.style.left = `${ringX}px`;
-      cursorRing.style.top = `${ringY}px`;
-    }
-    requestAnimationFrame(renderCursor);
-  };
-  requestAnimationFrame(renderCursor);
+  /* =========================================
+     HEADER SCROLL EFFECT
+  ========================================= */
 
-  // Expand cursor on interactive elements
-  const hoverTargets = document.querySelectorAll('a, button, .bento-item, .skill-pill');
-  hoverTargets.forEach(target => {
-    target.addEventListener('mouseenter', () => {
-      if (cursorRing) cursorRing.style.transform = 'translate(-50%, -50%) scale(1.5)';
-      if (cursorDot) cursorDot.style.transform = 'translate(-50%, -50%) scale(0.5)';
-    });
-    target.addEventListener('mouseleave', () => {
-      if (cursorRing) cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
-      if (cursorDot) cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-    });
-  });
+  const updateHeader = () => {
+    if (!header) return;
 
-  /* ==========================================================================
-     Typing Animation (Hero Section)
-     ========================================================================== */
-  const typingElement = document.querySelector('.typing-text');
-  const titles = [
-    'Full Stack Developer',
-    'AI/ML Engineer',
-    'React Developer',
-    'Problem Solver'
-  ];
-  let titleIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-
-  const type = () => {
-    if (!typingElement) return;
-
-    const currentTitle = titles[titleIndex];
-    
-    if (isDeleting) {
-      typingElement.textContent = currentTitle.substring(0, charIndex - 1);
-      charIndex--;
+    if (window.scrollY > 25) {
+      header.classList.add("scrolled");
     } else {
-      typingElement.textContent = currentTitle.substring(0, charIndex + 1);
-      charIndex++;
+      header.classList.remove("scrolled");
     }
-
-    let typeSpeed = isDeleting ? 50 : 100;
-
-    if (!isDeleting && charIndex === currentTitle.length) {
-      typeSpeed = 2000; // Pause at end
-      isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-      isDeleting = false;
-      titleIndex = (titleIndex + 1) % titles.length;
-      typeSpeed = 500; // Pause before typing next
-    }
-
-    setTimeout(type, typeSpeed);
   };
 
-  if (typingElement) {
-    type();
+  updateHeader();
+
+  window.addEventListener("scroll", updateHeader, {
+    passive: true
+  });
+
+
+  /* =========================================
+     MOBILE MENU
+  ========================================= */
+
+  if (menuToggle && header) {
+
+    menuToggle.addEventListener("click", () => {
+
+      const isOpen = header.classList.toggle("menu-open");
+
+      menuToggle.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
+
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen
+          ? "Close navigation"
+          : "Open navigation"
+      );
+
+    });
+
   }
 
-  /* ==========================================================================
-     Theme Toggle (Dark / Light Mode)
-     ========================================================================== */
-  const themeBtn = document.getElementById('theme-toggle');
-  const htmlEl = document.documentElement;
-  
-  // Check local storage for preference
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'light') {
-    htmlEl.classList.add('light');
-    htmlEl.classList.remove('dark');
+
+  /* =========================================
+     CLOSE MOBILE MENU
+     WHEN NAV LINK IS CLICKED
+  ========================================= */
+
+  navLinks.forEach((link) => {
+
+    link.addEventListener("click", () => {
+
+      if (header) {
+        header.classList.remove("menu-open");
+      }
+
+      if (menuToggle) {
+        menuToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        menuToggle.setAttribute(
+          "aria-label",
+          "Open navigation"
+        );
+      }
+
+    });
+
+  });
+
+
+  /* =========================================
+     ACTIVE NAVIGATION / SCROLL SPY
+  ========================================= */
+
+  if (sections.length && navLinks.length) {
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+
+        entries.forEach((entry) => {
+
+          if (!entry.isIntersecting) return;
+
+          navLinks.forEach((link) => {
+
+            const target =
+              link.getAttribute("href");
+
+            link.classList.toggle(
+              "active",
+              target === `#${entry.target.id}`
+            );
+
+          });
+
+        });
+
+      },
+      {
+        rootMargin: "-40% 0px -50% 0px"
+      }
+    );
+
+    sections.forEach((section) => {
+      sectionObserver.observe(section);
+    });
+
   }
 
-  themeBtn?.addEventListener('click', () => {
-    if (htmlEl.classList.contains('light')) {
-      htmlEl.classList.remove('light');
-      htmlEl.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      htmlEl.classList.remove('dark');
-      htmlEl.classList.add('light');
-      localStorage.setItem('theme', 'light');
-    }
+
+  /* =========================================
+     SCROLL REVEAL ANIMATION
+  ========================================= */
+
+  const revealItems = document.querySelectorAll(
+    `
+    .project,
+    .about-card,
+    .skill-line,
+    .timeline-item,
+    .career-cards > div,
+    .contact-list a
+    `
+  );
+
+
+  revealItems.forEach((element, index) => {
+
+    element.classList.add("reveal");
+
+    element.style.transitionDelay =
+      `${Math.min(index * 45, 220)}ms`;
+
   });
 
-  /* ==========================================================================
-     Header Scroll & Mobile Menu
-     ========================================================================== */
-  const header = document.getElementById('header');
-  const mobileBtn = document.getElementById('mobile-btn');
-  const mobileNav = document.getElementById('mobile-nav');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
 
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      header?.classList.add('scrolled');
-    } else {
-      header?.classList.remove('scrolled');
-    }
-  });
+  const revealObserver =
+    new IntersectionObserver(
+      (entries) => {
 
-  mobileBtn?.addEventListener('click', () => {
-    mobileNav?.classList.toggle('open');
-    const icon = mobileBtn.querySelector('i');
-    if (mobileNav?.classList.contains('open')) {
-      icon.classList.replace('fa-bars', 'fa-xmark');
-    } else {
-      icon.classList.replace('fa-xmark', 'fa-bars');
-    }
-  });
+        entries.forEach((entry) => {
 
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav?.classList.remove('open');
-      const icon = mobileBtn.querySelector('i');
-      icon.classList.replace('fa-xmark', 'fa-bars');
-    });
-  });
+          if (!entry.isIntersecting) return;
 
-  /* ==========================================================================
-     Scroll Spy (Active Nav Link)
-     ========================================================================== */
-  const sections = document.querySelectorAll('section');
-  const navLinks = document.querySelectorAll('.nav-link');
+          entry.target.classList.add("visible");
 
-  window.addEventListener('scroll', () => {
-    let current = '';
-    
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
-      if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
-        current = section.getAttribute('id');
+          revealObserver.unobserve(
+            entry.target
+          );
+
+        });
+
+      },
+      {
+        threshold: 0.12
       }
-    });
+    );
 
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href').substring(1) === current) {
-        link.classList.add('active');
-      }
-    });
+
+  revealItems.forEach((element) => {
+    revealObserver.observe(element);
   });
 
-  /* ==========================================================================
-     Intersection Observer (Fade Up Animations)
-     ========================================================================== */
-  const fadeElements = document.querySelectorAll('.fade-up');
 
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px"
-  };
+  /* =========================================
+     DESKTOP POINTER GLOW
+  ========================================= */
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // Only animate once
+  const finePointer =
+    window.matchMedia(
+      "(hover:hover) and (pointer:fine)"
+    ).matches;
+
+
+  if (finePointer) {
+
+    const pointerGlow =
+      document.createElement("div");
+
+    pointerGlow.style.cssText = `
+      position: fixed;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 999;
+      transform: translate(-50%, -50%);
+      background:
+        radial-gradient(
+          circle,
+          rgba(242, 123, 37, 0.11),
+          transparent 68%
+        );
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    `;
+
+
+    document.body.appendChild(pointerGlow);
+
+
+    window.addEventListener(
+      "mousemove",
+      (event) => {
+
+        pointerGlow.style.left =
+          `${event.clientX}px`;
+
+        pointerGlow.style.top =
+          `${event.clientY}px`;
+
+        pointerGlow.style.opacity = "1";
+
       }
-    });
-  }, observerOptions);
+    );
 
-  fadeElements.forEach(el => {
-    observer.observe(el);
-  });
+
+    document.addEventListener(
+      "mouseleave",
+      () => {
+
+        pointerGlow.style.opacity = "0";
+
+      }
+    );
+
+  }
+
+
+  /* =========================================
+     HERO PHOTO PARALLAX
+     
+     IMPORTANT:
+     This does NOT remove your photo background.
+     It only moves the complete photo slightly.
+  ========================================= */
+
+  const hero =
+    document.querySelector(".hero");
+
+  const photoFrame =
+    document.querySelector(".photo-frame");
+
+
+  if (
+    finePointer &&
+    hero &&
+    photoFrame
+  ) {
+
+    hero.addEventListener(
+      "mousemove",
+      (event) => {
+
+        const rect =
+          hero.getBoundingClientRect();
+
+
+        const x =
+          (event.clientX - rect.left)
+          / rect.width - 0.5;
+
+
+        const y =
+          (event.clientY - rect.top)
+          / rect.height - 0.5;
+
+
+        photoFrame.style.transform =
+          `
+          translate(
+            ${x * 5}px,
+            ${y * 4}px
+          )
+          `;
+
+      }
+    );
+
+
+    hero.addEventListener(
+      "mouseleave",
+      () => {
+
+        photoFrame.style.transform =
+          "translate(0, 0)";
+
+      }
+    );
+
+  }
+
+
+  /* =========================================
+     SMOOTH SCROLL
+  ========================================= */
+
+  document
+    .querySelectorAll('a[href^="#"]')
+    .forEach((link) => {
+
+      link.addEventListener(
+        "click",
+        (event) => {
+
+          const targetId =
+            link.getAttribute("href");
+
+          if (
+            !targetId ||
+            targetId === "#"
+          ) {
+            return;
+          }
+
+
+          const target =
+            document.querySelector(
+              targetId
+            );
+
+
+          if (!target) return;
+
+
+          event.preventDefault();
+
+
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+        }
+      );
+
+    });
+
+
+  /* =========================================
+     ESCAPE KEY
+     CLOSES MOBILE MENU
+  ========================================= */
+
+  document.addEventListener(
+    "keydown",
+    (event) => {
+
+      if (event.key !== "Escape") return;
+
+      if (header) {
+        header.classList.remove(
+          "menu-open"
+        );
+      }
+
+      if (menuToggle) {
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        menuToggle.setAttribute(
+          "aria-label",
+          "Open navigation"
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =========================================
+     IMAGE LOAD EFFECT
+     
+     Keeps the COMPLETE original image.
+  ========================================= */
+
+  const heroImage =
+    document.querySelector(
+      ".photo-frame img"
+    );
+
+
+  if (heroImage) {
+
+    if (heroImage.complete) {
+      heroImage.classList.add("loaded");
+    } else {
+
+      heroImage.addEventListener(
+        "load",
+        () => {
+          heroImage.classList.add(
+            "loaded"
+          );
+        }
+      );
+
+    }
+
+  }
+
+
+  /* =========================================
+     CURRENT YEAR
+     
+     If an element with #year exists,
+     automatically update it.
+  ========================================= */
+
+  const yearElement =
+    document.getElementById("year");
+
+
+  if (yearElement) {
+
+    yearElement.textContent =
+      new Date().getFullYear();
+
+  }
+
+
+  /* =========================================
+     PAGE LOADED
+  ========================================= */
+
+  document.body.classList.add(
+    "page-loaded"
+  );
 
 });
