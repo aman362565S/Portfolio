@@ -1,454 +1,125 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   /* =========================================
-     ELEMENTS
+     DOM ELEMENTS
   ========================================= */
-
   const header = document.getElementById("header");
   const menuToggle = document.getElementById("menuToggle");
-  const navLinks = document.querySelectorAll(".nav a");
-  const sections = document.querySelectorAll("main section[id]");
-
-
-  /* =========================================
-     HEADER SCROLL EFFECT
-  ========================================= */
-
-  const updateHeader = () => {
-    if (!header) return;
-
-    if (window.scrollY > 25) {
-      header.classList.add("scrolled");
-    } else {
-      header.classList.remove("scrolled");
-    }
-  };
-
-  updateHeader();
-
-  window.addEventListener("scroll", updateHeader, {
-    passive: true
-  });
-
+  const nav = document.getElementById("nav");
+  const navLinks = document.querySelectorAll("#nav a");
+  const heroCard = document.querySelector(".hero-card");
+  const portrait = document.querySelector(".portrait-container");
 
   /* =========================================
-     MOBILE MENU
+     MOBILE MENU TOGGLE
   ========================================= */
-
-  if (menuToggle && header) {
-
+  if (menuToggle && nav) {
     menuToggle.addEventListener("click", () => {
-
-      const isOpen = header.classList.toggle("menu-open");
-
-      menuToggle.setAttribute(
-        "aria-expanded",
-        String(isOpen)
-      );
-
+      const isOpen = nav.classList.toggle("mobile-active");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
       menuToggle.setAttribute(
         "aria-label",
-        isOpen
-          ? "Close navigation"
-          : "Open navigation"
+        isOpen ? "Close navigation" : "Open navigation"
       );
-
     });
 
+    // Close mobile nav on link click
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("mobile-active");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
   }
 
-
   /* =========================================
-     CLOSE MOBILE MENU
-     WHEN NAV LINK IS CLICKED
+     HERO PORTRAIT PARALLAX / TILT EFFECT
   ========================================= */
+  if (heroCard && portrait) {
+    heroCard.addEventListener("mousemove", (e) => {
+      const rect = heroCard.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
 
-  navLinks.forEach((link) => {
+      // Subtle tilt rotation
+      const tiltX = (y / rect.height) * -8;
+      const tiltY = (x / rect.width) * 8;
 
-    link.addEventListener("click", () => {
-
-      if (header) {
-        header.classList.remove("menu-open");
-      }
-
-      if (menuToggle) {
-        menuToggle.setAttribute(
-          "aria-expanded",
-          "false"
-        );
-
-        menuToggle.setAttribute(
-          "aria-label",
-          "Open navigation"
-        );
-      }
-
+      portrait.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
     });
 
-  });
-
+    heroCard.addEventListener("mouseleave", () => {
+      portrait.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+    });
+  }
 
   /* =========================================
-     ACTIVE NAVIGATION / SCROLL SPY
+     SMOOTH SCROLLING FOR INTERNAL LINKS
   ========================================= */
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      const targetId = this.getAttribute("href");
+      if (targetId === "#" || targetId === "") return;
 
-  if (sections.length && navLinks.length) {
-
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-
-        entries.forEach((entry) => {
-
-          if (!entry.isIntersecting) return;
-
-          navLinks.forEach((link) => {
-
-            const target =
-              link.getAttribute("href");
-
-            link.classList.toggle(
-              "active",
-              target === `#${entry.target.id}`
-            );
-
-          });
-
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
         });
-
-      },
-      {
-        rootMargin: "-40% 0px -50% 0px"
       }
-    );
-
-    sections.forEach((section) => {
-      sectionObserver.observe(section);
     });
-
-  }
-
-
-  /* =========================================
-     SCROLL REVEAL ANIMATION
-  ========================================= */
-
-  const revealItems = document.querySelectorAll(
-    `
-    .project,
-    .about-card,
-    .skill-line,
-    .timeline-item,
-    .career-cards > div,
-    .contact-list a
-    `
-  );
-
-
-  revealItems.forEach((element, index) => {
-
-    element.classList.add("reveal");
-
-    element.style.transitionDelay =
-      `${Math.min(index * 45, 220)}ms`;
-
   });
 
+  /* =========================================
+     INTERSECTION OBSERVER FOR FADE-IN ANIMATIONS
+  ========================================= */
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px"
+  };
 
-  const revealObserver =
-    new IntersectionObserver(
-      (entries) => {
-
-        entries.forEach((entry) => {
-
-          if (!entry.isIntersecting) return;
-
-          entry.target.classList.add("visible");
-
-          revealObserver.unobserve(
-            entry.target
-          );
-
-        });
-
-      },
-      {
-        threshold: 0.12
+  const fadeInObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("fade-in-visible");
+        observer.unobserve(entry.target);
       }
-    );
+    });
+  }, observerOptions);
 
-
-  revealItems.forEach((element) => {
-    revealObserver.observe(element);
+  document.querySelectorAll(".project-card, .skill-row, .about-card, .timeline-card").forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(20px)";
+    el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+    fadeInObserver.observe(el);
   });
 
-
-  /* =========================================
-     DESKTOP POINTER GLOW
-  ========================================= */
-
-  const finePointer =
-    window.matchMedia(
-      "(hover:hover) and (pointer:fine)"
-    ).matches;
-
-
-  if (finePointer) {
-
-    const pointerGlow =
-      document.createElement("div");
-
-    pointerGlow.style.cssText = `
-      position: fixed;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 999;
-      transform: translate(-50%, -50%);
-      background:
-        radial-gradient(
-          circle,
-          rgba(242, 123, 37, 0.11),
-          transparent 68%
-        );
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    `;
-
-
-    document.body.appendChild(pointerGlow);
-
-
-    window.addEventListener(
-      "mousemove",
-      (event) => {
-
-        pointerGlow.style.left =
-          `${event.clientX}px`;
-
-        pointerGlow.style.top =
-          `${event.clientY}px`;
-
-        pointerGlow.style.opacity = "1";
-
-      }
-    );
-
-
-    document.addEventListener(
-      "mouseleave",
-      () => {
-
-        pointerGlow.style.opacity = "0";
-
-      }
-    );
-
-  }
-
-
-  /* =========================================
-     HERO PHOTO PARALLAX
-     
-     IMPORTANT:
-     This does NOT remove your photo background.
-     It only moves the complete photo slightly.
-  ========================================= */
-
-  const hero =
-    document.querySelector(".hero");
-
-  const photoFrame =
-    document.querySelector(".photo-frame");
-
-
-  if (
-    finePointer &&
-    hero &&
-    photoFrame
-  ) {
-
-    hero.addEventListener(
-      "mousemove",
-      (event) => {
-
-        const rect =
-          hero.getBoundingClientRect();
-
-
-        const x =
-          (event.clientX - rect.left)
-          / rect.width - 0.5;
-
-
-        const y =
-          (event.clientY - rect.top)
-          / rect.height - 0.5;
-
-
-        photoFrame.style.transform =
-          `
-          translate(
-            ${x * 5}px,
-            ${y * 4}px
-          )
-          `;
-
-      }
-    );
-
-
-    hero.addEventListener(
-      "mouseleave",
-      () => {
-
-        photoFrame.style.transform =
-          "translate(0, 0)";
-
-      }
-    );
-
-  }
-
-
-  /* =========================================
-     SMOOTH SCROLL
-  ========================================= */
-
-  document
-    .querySelectorAll('a[href^="#"]')
-    .forEach((link) => {
-
-      link.addEventListener(
-        "click",
-        (event) => {
-
-          const targetId =
-            link.getAttribute("href");
-
-          if (
-            !targetId ||
-            targetId === "#"
-          ) {
-            return;
-          }
-
-
-          const target =
-            document.querySelector(
-              targetId
-            );
-
-
-          if (!target) return;
-
-
-          event.preventDefault();
-
-
-          target.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-
-        }
-      );
-
-    });
-
-
-  /* =========================================
-     ESCAPE KEY
-     CLOSES MOBILE MENU
-  ========================================= */
-
-  document.addEventListener(
-    "keydown",
-    (event) => {
-
-      if (event.key !== "Escape") return;
-
-      if (header) {
-        header.classList.remove(
-          "menu-open"
-        );
-      }
-
-      if (menuToggle) {
-
-        menuToggle.setAttribute(
-          "aria-expanded",
-          "false"
-        );
-
-        menuToggle.setAttribute(
-          "aria-label",
-          "Open navigation"
-        );
-
-      }
-
+  // Inject helper class for reveal
+  const style = document.createElement("style");
+  style.textContent = `
+    .fade-in-visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
     }
-  );
-
-
-  /* =========================================
-     IMAGE LOAD EFFECT
-     
-     Keeps the COMPLETE original image.
-  ========================================= */
-
-  const heroImage =
-    document.querySelector(
-      ".photo-frame img"
-    );
-
-
-  if (heroImage) {
-
-    if (heroImage.complete) {
-      heroImage.classList.add("loaded");
-    } else {
-
-      heroImage.addEventListener(
-        "load",
-        () => {
-          heroImage.classList.add(
-            "loaded"
-          );
-        }
-      );
-
+    @media (max-width: 768px) {
+      .nav.mobile-active {
+        display: flex !important;
+        position: absolute;
+        top: 70px;
+        left: 20px;
+        right: 20px;
+        background: rgba(20, 8, 4, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 20px;
+        padding: 24px;
+        flex-direction: column;
+        gap: 16px;
+        z-index: 100;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      }
     }
-
-  }
-
-
-  /* =========================================
-     CURRENT YEAR
-     
-     If an element with #year exists,
-     automatically update it.
-  ========================================= */
-
-  const yearElement =
-    document.getElementById("year");
-
-
-  if (yearElement) {
-
-    yearElement.textContent =
-      new Date().getFullYear();
-
-  }
-
-
-  /* =========================================
-     PAGE LOADED
-  ========================================= */
-
-  document.body.classList.add(
-    "page-loaded"
-  );
-
+  `;
+  document.head.appendChild(style);
 });
